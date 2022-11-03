@@ -84,8 +84,8 @@ public class PutEventsXray {
         try {
             // Populate a List with the resource ARN values.
             List<String> resources = new ArrayList<>();
-            resources.add(resourceArn);
-            resources.add(resourceArn2);
+            resources.add("arn:aws:events:us-east-1:061088380739:event-bus/eventbus-wy-1");
+            //resources.add(resourceArn2);
 
             PutEventsRequestEntry reqEntry = PutEventsRequestEntry.builder()
                 .resources(resources)
