@@ -47,35 +47,34 @@ public class PutEventsXray {
         String resourceArn2 = args[1];
         Region region = Region.US_EAST_1;
 
-
+        //eventBridgeClient
         EventBridgeClient eventBrClient = EventBridgeClient.builder()
             .region(region)
             .credentialsProvider(ProfileCredentialsProvider.create())
             .build();
 
+        //eventBridgeWithXray AsyncClient
         EventBridgeAsyncClient eventBrAscClient = EventBridgeAsyncClient.builder()
                 .region(region)
                 .credentialsProvider(ProfileCredentialsProvider.create())
-                                    .overrideConfiguration(ClientOverrideConfiguration.builder()
+                .overrideConfiguration(ClientOverrideConfiguration.builder()
                             // manual instrumentation as described here https://aws.amazon.com/blogs/developer/x-ray-support-for-the-aws-sdk-for-java-v2/
                             .addExecutionInterceptor(new TracingInterceptor())
                             .build())
                 .build();
 
+        //eventBridgeWithXrayClient
+        EventBridgeClient eventBrClientWithXray = EventBridgeClient.builder()
+                .region(region)
+                .credentialsProvider(ProfileCredentialsProvider.create())
+                .overrideConfiguration(ClientOverrideConfiguration.builder()
+                        // manual instrumentation as described here https://aws.amazon.com/blogs/developer/x-ray-support-for-the-aws-sdk-for-java-v2/
+                        .addExecutionInterceptor(new TracingInterceptor())
+                        .build())
+                .build();
 
-//        @Produces
-//        public S3AsyncClient asyncS3Client(@ConfigProperty(name = "aws.region", defaultValue = "us-west-2") final String awsRegion) {
-//            return S3AsyncClient.builder()
-//                    .region(Region.of(awsRegion))
-//                    .httpClient(NettyNioAsyncHttpClient.builder().build())
-//                    .overrideConfiguration(ClientOverrideConfiguration.builder()
-//                            // manual instrumentation as described here https://aws.amazon.com/blogs/developer/x-ray-support-for-the-aws-sdk-for-java-v2/
-//                            .addExecutionInterceptor(new TracingInterceptor())
-//                            .build())
-//                    .build();
-//        }
 
-        putEBEvents(eventBrClient, resourceArn, resourceArn2);
+        putEBEvents(eventBrClientWithXray, resourceArn, resourceArn2);
         eventBrClient.close();
     }
 
