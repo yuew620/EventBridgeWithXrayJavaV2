@@ -10,6 +10,7 @@ package com.example.eventbridge;
 
 // snippet-start:[eventbridge.java2._put_event.import]
 
+import com.amazonaws.xray.AWSXRay;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.regions.Region;
@@ -32,7 +33,7 @@ import com.amazonaws.xray.interceptors.TracingInterceptor;
 public class PutEventsXray {
 
     public static void main(String[] args) {
-
+        AWSXRay.beginSegment("WYCOM-init");
         final String usage =
             "To run this example, supply two resources, identified by Amazon Resource Name (ARN), which the event primarily concerns. " +
             "Any number, including zero, may be present. \n" +
@@ -76,6 +77,7 @@ public class PutEventsXray {
 
         putEBEvents(eventBrClientWithXray, resourceArn, resourceArn2);
         eventBrClient.close();
+        AWSXRay.endSegment();
     }
 
     // snippet-start:[eventbridge.java2._put_event.main]
